@@ -199,3 +199,27 @@ input::placeholder, textarea::placeholder { color: #a3ada3; }
   .goal-summary-strip span { font-size: 8px; }
   .page-wrap { margin: 30px auto; }
 }
+.future-preview {
+  background: #eef1e9;
+  border: 1px solid #dfe5d9;
+  border-radius: 16px;
+  padding: 22px;
+  margin-top: 16px;
+}
+
+.future-preview h3 {
+  color: #303a34;
+  font-size: 19px;
+  margin: 12px 0;
+}
+
+.future-preview p {
+  color: #59635b;
+  font-size: 14px;
+  line-height: 1.8;
+  margin-bottom: 12px;
+}
+
+.future-preview .light-btn {
+  margin-top: 8px;
+}
