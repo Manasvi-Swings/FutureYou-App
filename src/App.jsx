@@ -1,9 +1,15 @@
 import { useEffect, useId, useRef, useState } from "react";
 import {
+  motion,
+  AnimatePresence,
+  useReducedMotion
+} from "framer-motion";
+import {
   Home, Check, Plus, Trash2, Target,
   ArrowRight, Sparkles, SlidersHorizontal, Mail,
   CalendarDays, TrendingUp, ChevronRight, Sun, Moon
 } from "lucide-react";
+
 import {
   Cell,
   Label,
@@ -275,9 +281,14 @@ function readTheme() {
   }
   return "day";
 }
-
+const pageVariants = {
+  initial: { opacity: 0, y: 12 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -8 }
+};
 function App() {
   const [page, setPage] = useState("Today");
+  const reduceMotion = useReducedMotion();
   const [letterVersion, setLetterVersion] = useState(0);
   const [theme, setTheme] = useState(readTheme);
   const [activeRoutineIndex, setActiveRoutineIndex] = useState(0);
@@ -306,7 +317,9 @@ function App() {
   const [scenario, setScenario] = useState({
     study: 2, sleep: 8, exercise: 3, screen: 4
   });
-
+const [aiLetter, setAiLetter] = useState("");
+const [isGenerating, setIsGenerating] = useState(false);
+const [aiError, setAiError] = useState("");
   useEffect(() => {
     localStorage.setItem("fy-habits", JSON.stringify(habits));
   }, [habits]);
@@ -541,7 +554,32 @@ function App() {
     "What If?": "What if you changed?",
     "Future Letter": "Dear, future me."
   };
+async function generateAiLetter() {
+  setIsGenerating(true);
+  setAiError("");
 
+  try {
+    const response = await fetch("/api/generate-letter", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ habits, goals })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not generate your letter.");
+    }
+
+    setAiLetter(data.letter);
+  } catch (error) {
+    setAiError(error.message || "Something went wrong. Please try again.");
+  } finally {
+    setIsGenerating(false);
+  }
+}
   return (
     <div className="app-shell" data-theme={theme}>
       <a className="skip-link" href="#main-content">Skip to content</a>
@@ -602,78 +640,106 @@ function App() {
       <main id="main-content" className="main-content" tabIndex={-1}>
         <header className="topbar">
           <div>
-            <div className="overline">Personal growth, your way</div>
+           <div className="overline" style={{ fontStyle: "italic" }}>
+  Personal growth, your way
+</div>
             <p>{today.toLocaleDateString("en-US", {
               weekday: "long", month: "long", day: "numeric"
             })}</p>
           </div>
 
-          <span className="topbar-tag">
-            <Sparkles size={15} aria-hidden="true" /> Your next chapter
-          </span>
+          
         </header>
+        <AnimatePresence mode="wait" initial={false}>
+  <motion.div
+    key={page}
+    variants={pageVariants}
+    initial={reduceMotion ? false : "initial"}
+    animate="animate"
+    exit={reduceMotion ? undefined : "exit"}
+    transition={{
+      duration: reduceMotion ? 0 : 0.28,
+      ease: "easeOut"
+    }}
+  >
+ {page === "Today" && <>
 
-        {page === "Today" && <>
-          <section className="hero" aria-labelledby="today-heading">
-            <div>
-              <span className="tag">A new day, a new chance</span>
-              <h1
-                id="today-heading"
-                ref={pageHeadingRef}
-                tabIndex={-1}
-              >
-                Make today count.<br /><span>On your terms.</span>
-              </h1>
-              <p>Small, intentional actions can move you closer to the life you want.</p>
+<motion.section
+  className="hero"
+  aria-labelledby="today-heading"
+  initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: reduceMotion ? 0 : 0.45 }}
+>
+  <div>
+    <h1
+      id="today-heading"
+      ref={pageHeadingRef}
+      tabIndex={-1}
+    >
+      Make today count.
+    </h1>
 
-              <button
-                type="button"
-                className="primary-btn"
-                onClick={() => goToPage("Future Goals")}
-              >
-                Work on my goals <ArrowRight size={16} aria-hidden="true" />
-              </button>
-            </div>
+    <button
+      type="button"
+      className="primary-btn"
+      onClick={() => goToPage("Future Goals")}
+    >
+      Work on my goals <ArrowRight size={16} aria-hidden="true" />
+    </button>
+  </div>
 
-            <div className="hero-shape" aria-hidden="true">
-              <div className="shape-circle"></div>
-              <div className="shape-square"></div>
-              <span>plan · act · grow</span>
-            </div>
-          </section>
+  <div className="hero-shape" aria-hidden="true">
+    <div className="shape-circle"></div>
+    <div className="shape-square"></div>
+    <span>plan · act · grow</span>
+  </div>
+</motion.section>
 
           <section className="section-heading">
             <div>
-              <div className="overline">Your daily overview</div>
+             
               <h2>Today, so far</h2>
             </div>
             <span className="muted">{dateKey}</span>
           </section>
 
           <section className="stats-grid" aria-label="Today at a glance">
-            <div className="stat-card">
+            <motion.div
+  className="stat-card"
+  whileHover={reduceMotion ? undefined : { y: -4 }}
+  transition={{ duration: 0.18 }}
+>
               <span className="stat-icon sage" aria-hidden="true"><Check /></span>
               <div>
                 <strong>{completed}/{habits.length}</strong>
                 <small>Habits completed</small>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="stat-card">
+           <motion.div
+  className="stat-card"
+  whileHover={reduceMotion ? undefined : { y: -4 }}
+  transition={{ duration: 0.18 }}
+>
               <span className="stat-icon blue" aria-hidden="true"><Target /></span>
               <div>
                 <strong>{goals.length}</strong>
                 <small>Goals created</small>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="stat-card">
+            <motion.div
+  className="stat-card"
+  whileHover={reduceMotion ? undefined : { y: -4 }}
+  transition={{ duration: 0.18 }}
+>
               <span className="stat-icon sand" aria-hidden="true"><TrendingUp /></span>
               <div>
                 <strong>{goalProgress}%</strong>
                 <small>Goals completed</small>
               </div>
-            </div>
+            </motion.div>
           </section>
 
           <section className="dashboard-grid">
@@ -726,22 +792,7 @@ function App() {
                 <span className="note-date">Today's reminder · {dateKey}</span>
               </div>
 
-              <div className="goal-preview">
-                <div className="overline">Your bigger picture</div>
-                <h3>Keep your goals in sight.</h3>
-                <p>
-                  {goals.length
-                    ? `${goals.length} ${goals.length === 1 ? "goal is" : "goals are"} part of your journey.`
-                    : "Your future starts with deciding what matters to you."}
-                </p>
-                <button
-                  type="button"
-                  className="light-btn"
-                  onClick={() => goToPage("Future Goals")}
-                >
-                  Open my goals <ArrowRight size={15} aria-hidden="true" />
-                </button>
-              </div>
+             
 
               <div className="future-preview">
                 <div className="overline">A note from your future self</div>
@@ -846,9 +897,14 @@ function App() {
                   </select>
                 </div>
 
-                <button className="primary-btn" type="submit">
+                <motion.button
+  className="primary-btn"
+  type="submit"
+  whileHover={reduceMotion ? undefined : { scale: 1.03 }}
+  whileTap={reduceMotion ? undefined : { scale: 0.97 }}
+>
                   <Plus size={16} aria-hidden="true" /> Add habit
-                </button>
+                </motion.button>
               </form>
             </div>
           </section>
@@ -1058,7 +1114,7 @@ function App() {
               {pageTitles["What If?"]}
             </h1>
             <p className="page-description">
-              Adjust your routine and see how the numbers change over a week. This is a simple planning tool, not a prediction of your future.
+              Adjust your routine and see how the numbers change over a week. 
             </p>
 
             <div className="simulator-layout">
@@ -1195,15 +1251,15 @@ function App() {
                   </footer>
                 </article>
 
-                <div className="simulation-message simulation-message--span">
-                  {scenario.study >= 2 && scenario.sleep >= 7 && scenario.screen <= 5
+<div
+  className="simulation-message simulation-message--span"
+  style={{ fontStyle: "italic", textAlign: "center" }}
+>                  {scenario.study >= 2 && scenario.sleep >= 7 && scenario.screen <= 5
                     ? "Your proposed routine makes room for focus, rest and balance."
                     : "Try one realistic adjustment at a time. A routine should support your life, not overwhelm it."}
                 </div>
 
-                <small className="disclaimer disclaimer--span">
-                  Illustrative arithmetic based on the comparison values shown. Not a health or life-outcome forecast.
-                </small>
+               
               </div>
             </div>
           </section>
@@ -1233,23 +1289,38 @@ function App() {
                 })}
               </div>
 
-              <h2>Dear me,</h2>
+              {aiLetter ? (
+  <p style={{ whiteSpace: "pre-wrap" }}>{aiLetter}</p>
+) : (
+  <>
+    <h2>Dear me,</h2>
 
-              {futureLetter.map((paragraph, index) => (
-                <p key={`${letterVersion}-${index}`}>{paragraph}</p>
-              ))}
+    {futureLetter.map((paragraph, index) => (
+      <p key={`${letterVersion}-${index}`}>{paragraph}</p>
+    ))}
 
-              <h3>Keep going.</h3>
-              <div className="letter-signature">From the you of today.</div>
+    <h3>Keep going.</h3>
+    <div className="letter-signature">From the you of today.</div>
+  </>
+)}
             </article>
+<button
+  type="button"
+  className="primary-btn"
+  onClick={() => {
+  setAiLetter("");
+  setLetterVersion(v => v + 1);
+}}
+  disabled={isGenerating}
+>
+  <Sparkles size={16} aria-hidden="true" />
+  {isGenerating ? "Writing your letter..." : "Generate with AI"}
+</button>
 
-            <button
-              type="button"
-              className="primary-btn"
-              onClick={() => setLetterVersion(v => v + 1)}
-            >
-              <Sparkles size={16} aria-hidden="true" /> Write another version
-            </button>
+{aiError && (
+  <p role="alert" className="letter-hint">{aiError}</p>
+)}
+           
 
             {goals.length === 0 && (
               <p className="letter-hint">
@@ -1258,8 +1329,9 @@ function App() {
             )}
           </section>
         )}
-
-        <footer className="app-footer">Future You · Built one day at a time</footer>
+  </motion.div>
+        </AnimatePresence>
+        <footer className="app-footer">Future You · For You</footer>
       </main>
     </div>
   );

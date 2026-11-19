@@ -28,3 +28,4 @@ dist-ssr
 # Taste Skill working files (install via npx skills add Leonxlnx/taste-skill)
 .agents/
 .taste-skill/
+.vercel

@@ -298,6 +298,9 @@ a:focus-visible {
 
 .topbar .overline {
   margin-bottom: var(--s-1);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.5px;
 }
 
 .topbar p {
@@ -323,6 +326,7 @@ a:focus-visible {
   font-size: var(--t-label);
   font-weight: 500;
   color: var(--p-muted);
+   font-style: italic;
 }
 
 .hero {
@@ -407,7 +411,8 @@ a:focus-visible {
   bottom: 0;
   right: 0;
   z-index: 1;
-  color: rgba(243, 241, 236, 0.7);
+color: var(--p-inv-ink);
+opacity: 0.72;
   font-size: var(--t-label);
   font-weight: 500;
   font-family: var(--font-mono);
@@ -1133,6 +1138,9 @@ textarea::placeholder {
 .simulation-message--span,
 .disclaimer--span {
   grid-column: 1 / -1;
+  text-align: center;
+font-style: italic !important;
+width: 100%;
 }
 
 .slider-item {
