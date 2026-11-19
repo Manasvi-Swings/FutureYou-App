@@ -24,3 +24,7 @@ dist-ssr
 *.sw?
 .rocketride/
 .env
+
+# Taste Skill working files (install via npx skills add Leonxlnx/taste-skill)
+.agents/
+.taste-skill/
