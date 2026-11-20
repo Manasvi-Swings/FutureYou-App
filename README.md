@@ -1,16 +1,32 @@
-# React + Vite
+Unique Selling Points (USPs)
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+**Future You** is more than a conventional habit tracker. It is a personal growth companion designed to help users connect their everyday actions with their long-term aspirations and become more intentional about the person they want to become.
 
-Currently, two official plugins are available:
+### 1. Future-Self Perspective
+Instead of focusing only on daily tasks and reminders, Future You encourages users to think about the person they want to become. Its Future-Self Letter feature uses Google's Gemini AI to generate personalised, encouraging letters based on the user's habits and goals.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### 2. Connecting Habits with Long-Term Goals
+Future You brings habit tracking and goal management together in one place. Users can track their daily routines while setting short-term and long-term goals, making it easier to connect small, consistent actions with bigger ambitions.
 
-## React Compiler
+### 3. Interactive "What If?" Routine Simulator
+Users can experiment with changes to their daily routines, such as increasing study time, improving sleep, exercising more or reducing screen time. The simulator uses predefined calculations to illustrate how these adjustments could shape their weekly schedule and balance.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 4. Personalised AI-Powered Reflection
+The Gemini-powered Future-Self Letter feature transforms the user's habit and goal information into a personalised reflection. Rather than providing generic motivational quotes, it generates an encouraging message grounded in the information the user has entered.
 
-## Expanding the Oxlint configuration
+### 5. Daily Motivation and Progress Awareness
+Daily motivational notes, progress visualisations and habit tracking encourage users to stay aware of their efforts and maintain consistency. The focus is on recognising progress rather than demanding perfection.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+### 6. Simple, Distraction-Free Experience
+The application combines a clean, minimal interface with light and dark themes, smooth animations and intuitive navigation. Its design aims to make personal growth feel approachable rather than overwhelming.
+
+### 7. Lightweight and Accessible MVP
+Future You uses browser LocalStorage to preserve habits, goals and theme preferences without requiring users to create an account for the current MVP. This keeps the initial experience simple and reduces setup requirements.
+
+### What Makes Future You Different?
+
+Most habit trackers focus on recording what users have already done. Future You takes a more forward-looking approach by bringing together **daily habits, long-term goals, routine experimentation and AI-powered future-self reflection** in one experience.
+
+Its central idea is simple:
+
+> **Your future is shaped by the choices you make today. Future You helps you make those choices count.**
